@@ -6,11 +6,9 @@
 
 ![coding_style](https://img.shields.io/badge/code%20style-black-000000.svg)
 
- 
-
 ## Environment
 
-    - Python 3.9.4
+- Python 3.9
 
 ## Install
 
@@ -25,4 +23,10 @@ It will also install `jupyterlab` for notebook experience.
 
 ## Usage
 
+    python make_timeline.py
+
 ## Credits
+
+- [Logo][1]
+
+[1]:https://www.iconfinder.com/icons/2639811/face_id_icon
