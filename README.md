@@ -6,6 +6,8 @@
 
 ![coding_style](https://img.shields.io/badge/code%20style-black-000000.svg)
 
+A Python script to make video from selfies
+
 ## Environment
 
 - Python 3.9
