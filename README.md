@@ -14,8 +14,8 @@ A Python script to make video from selfies
 
 ## Install
 
-    python -m venv venv
-    source venv/bin/activate
+    python -m venv .venv
+    source .venv/bin/activate
     python -m pip install -U pip
     pip install -r requirements.txt
 
