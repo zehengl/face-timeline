@@ -25,10 +25,17 @@ It will also install `jupyterlab` for notebook experience.
 
 ## Usage
 
-    python make_timeline.py
+1.  Create a `.env` file and specify the `selfies` path
+
+        # .env
+        selfiles="..."
+
+2.  Run Script
+
+        python make_timeline.py
 
 ## Credits
 
 - [Logo][1]
 
-[1]:https://www.iconfinder.com/icons/2639811/face_id_icon
+[1]: https://www.iconfinder.com/icons/2639811/face_id_icon

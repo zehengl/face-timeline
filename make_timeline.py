@@ -1,11 +1,15 @@
 # %%
 from pathlib import Path
+from os import getenv
 
 import cv2
 import pandas as pd
 import seaborn as sns
+from dotenv import load_dotenv
 from tqdm import tqdm
 
+
+load_dotenv()
 
 output = Path("output")
 output.mkdir(exist_ok=True)
@@ -13,20 +17,41 @@ output.mkdir(exist_ok=True)
 faces_folder = Path("output/faces")
 faces_folder.mkdir(exist_ok=True)
 
+selfies = Path(getenv("selfies"))
+assert selfies.exists()
+
 # %%
-files = list(Path("selfie").glob("*.jpg"))
+files = list(selfies.glob("*.jpg"))
 df = pd.DataFrame({"file": files})
 df["date"] = df["file"].apply(lambda x: pd.to_datetime(x.stem))
 
 # %%
-ax = sns.countplot(df["date"].dt.year)
+ax = sns.countplot(df, x=df["date"].dt.year)
 ax.set(xlabel="Year")
 ax.get_figure().savefig("output/count-per-year.png", dpi=300, bbox_inches="tight")
 
 # %%
-ax = sns.countplot(df["date"].dt.month)
+ax = sns.countplot(df, x=df["date"].dt.month)
 ax.set(xlabel="Month")
 ax.get_figure().savefig("output/count-per-month.png", dpi=300, bbox_inches="tight")
+
+# %%
+ax = sns.countplot(
+    df,
+    x=df["date"].dt.day_name(),
+    order=[
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ],
+)
+ax.set(xlabel="Weekday")
+ax.set_xticklabels(ax.get_xticklabels(), rotation=30)
+ax.get_figure().savefig("output/count-per-weekday.png", dpi=300, bbox_inches="tight")
 
 # %%
 size = (224, 224)
@@ -57,12 +82,12 @@ def get_face(path, dest=faces_folder):
 
 
 # %%
-for path in tqdm(df["file"]):
+for path in tqdm(df["file"], desc="Getting Faces"):
     get_face(path)
 
 # %%
 imgs = []
-for filename in sorted(list(faces_folder.glob("*.jpg"))):
+for filename in tqdm(sorted(list(faces_folder.glob("*.jpg"))), desc="Generating Video"):
     img = cv2.imread(str(filename))
     img = cv2.putText(
         img,
