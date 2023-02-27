@@ -1,5 +1,5 @@
-opencv-python==4.7.0.68
+opencv-python==4.7.0.72
 pandas==1.5.3
-python-dotenv==0.21.1
+python-dotenv==1.0.0
 seaborn==0.12.2
 tqdm==4.64.1
