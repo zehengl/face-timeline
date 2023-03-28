@@ -19,7 +19,9 @@ A Python script to make video from selfies
     python -m pip install -U pip
     pip install -r requirements.txt
 
-> Use `pip install -r requirements-dev.txt` for development.
+> Configure `--extra-index-url` if CUDA is available, e.g. `pip install --trusted-host download.pytorch.org --extra-index-url https://download.pytorch.org/whl/cu118 -r requirements.txt`.
+>
+> Use `requirements-dev.txt` for development.
 
 ## Usage
 

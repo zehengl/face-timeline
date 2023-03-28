@@ -1,10 +1,13 @@
 # %%
+import logging
 from pathlib import Path
 
 import cv2
 import pandas as pd
 from tqdm import tqdm
 from ultralytics import YOLO
+
+logging.getLogger("ultralytics").setLevel(logging.WARNING)
 
 output = Path("output")
 output.mkdir(exist_ok=True)
@@ -14,7 +17,6 @@ faces.mkdir(exist_ok=True)
 
 df = pd.read_pickle(output / "df.pkl")
 model = YOLO("yolov8n.pt")
-
 
 # %%
 for file in tqdm(df["file"].tolist()):
