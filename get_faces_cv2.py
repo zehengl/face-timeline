@@ -13,10 +13,8 @@ faces.mkdir(exist_ok=True)
 
 df = pd.read_pickle(output / "df.pkl")
 
+
 # %%
-size = (224, 224)
-
-
 def get_face(path, dest=faces):
     img = cv2.imread(str(path))
     gray = cv2.equalizeHist(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
@@ -37,10 +35,9 @@ def get_face(path, dest=faces):
         offset_x = int(w * 0.25)
         offset_y = int(h * 0.25)
         face = img[y - offset_y : y + h + offset_y, x - offset_x : x + w + offset_x]
-        face = cv2.resize(face, size)
         cv2.imwrite(str(dest / f"{path.stem}.jpg"), face)
 
 
 # %%
-for path in tqdm(df["file"], desc="Getting Faces"):
+for path in tqdm(df["file"], desc="Getting Faces by CV2"):
     get_face(path)
