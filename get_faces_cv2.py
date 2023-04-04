@@ -8,7 +8,7 @@ from tqdm import tqdm
 output = Path("output")
 output.mkdir(exist_ok=True)
 
-faces = output / "faces_cv2"
+faces = output / "faces-cv2"
 faces.mkdir(exist_ok=True)
 
 df = pd.read_pickle(output / "df.pkl")

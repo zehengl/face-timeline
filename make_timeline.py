@@ -42,8 +42,11 @@ def generate(faces, opt):
             )
             imgs.append(img)
 
+        timeline = output / f"face-timeline-{opt}"
+        timeline.mkdir(exist_ok=True)
+
         out = cv2.VideoWriter(
-            str(output / f"face-timeline-{opt}-{year}.mp4"),
+            str(timeline / f"face-timeline-{opt}-{year}.mp4"),
             cv2.VideoWriter_fourcc(*"mp4v"),
             max(
                 int(base_fps * (by_year.shape[0] / ave_imgs)),
@@ -58,7 +61,8 @@ def generate(faces, opt):
 
     print()
     clips = [
-        VideoFileClip(f"output/face-timeline-{opt}-{y}.mp4") for y in df.year.unique()
+        VideoFileClip(str(timeline / f"face-timeline-{opt}-{y}.mp4"))
+        for y in df.year.unique()
     ]
 
     final_clip = concatenate_videoclips(clips)
@@ -67,7 +71,7 @@ def generate(faces, opt):
 
 # %%
 for opt in ["cv2", "yolo"]:
-    faces = output / f"faces_{opt}"
+    faces = output / f"faces-{opt}"
     faces.mkdir(exist_ok=True)
 
     generate(faces, opt)
