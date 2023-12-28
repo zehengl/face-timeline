@@ -1,11 +1,11 @@
 # %%
-from pathlib import Path
 from os import getenv
+from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from dotenv import load_dotenv
-import matplotlib.pyplot as plt
 
 load_dotenv()
 
