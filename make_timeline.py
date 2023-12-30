@@ -1,18 +1,27 @@
 # %%
+from os import getenv
 from pathlib import Path
 
 import cv2
 import pandas as pd
+from dotenv import load_dotenv
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 from tqdm import tqdm
 
-output = Path("output")
-output.mkdir(exist_ok=True)
+load_dotenv()
+
+width = int(getenv("width", "512"))
+base_fps = int(getenv("base_fps", "24"))
+date_x = float(getenv("date_x", ".75"))
+subfolder = getenv("subfolder")
+
+output = Path("output") if not subfolder else Path(f"output/{subfolder}")
+output.mkdir(exist_ok=True, parents=True)
 
 
 # %%
 def generate(faces, opt):
-    size = (224, 224)
+    size = (width, width)
 
     files = list(faces.glob("*.jpg"))
     df = pd.DataFrame({"file": files})
@@ -21,7 +30,6 @@ def generate(faces, opt):
     df = df.sort_values("date")
 
     ave_imgs = df.groupby("year").count().reset_index().mean()["file"]
-    base_fps = 24
 
     for year, by_year in df.groupby("year"):
         imgs = []
@@ -33,7 +41,7 @@ def generate(faces, opt):
             img = cv2.putText(
                 img,
                 filename.stem,
-                (130, 220),
+                (int(width * date_x), int(width * 0.9)),
                 cv2.FONT_HERSHEY_COMPLEX,
                 0.4,
                 (255, 255, 255),
@@ -66,7 +74,7 @@ def generate(faces, opt):
     ]
 
     final_clip = concatenate_videoclips(clips)
-    final_clip.write_videofile(f"output/face-timeline-{opt}.mp4", logger=None)
+    final_clip.write_videofile(str(output / f"face-timeline-{opt}.mp4"), logger=None)
 
 
 # %%

@@ -1,12 +1,18 @@
 # %%
+from os import getenv
 from pathlib import Path
 
 import cv2
 import pandas as pd
+from dotenv import load_dotenv
 from tqdm import tqdm
 
-output = Path("output")
-output.mkdir(exist_ok=True)
+load_dotenv()
+
+subfolder = getenv("subfolder")
+
+output = Path("output") if not subfolder else Path(f"output/{subfolder}")
+output.mkdir(exist_ok=True, parents=True)
 
 faces = output / "faces-cv2"
 faces.mkdir(exist_ok=True)
