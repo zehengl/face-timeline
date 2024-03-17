@@ -11,7 +11,7 @@ from ultralytics import YOLO
 
 logging.getLogger("ultralytics").setLevel(logging.ERROR)
 
-load_dotenv()
+load_dotenv(override=True)
 
 subfolder = getenv("subfolder")
 

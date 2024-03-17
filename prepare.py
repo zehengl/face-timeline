@@ -7,7 +7,7 @@ import pandas as pd
 import seaborn as sns
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 selfies = Path(getenv("selfies"))
 assert selfies.exists()

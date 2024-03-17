@@ -7,7 +7,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from tqdm import tqdm
 
-load_dotenv()
+load_dotenv(override=True)
 
 subfolder = getenv("subfolder")
 

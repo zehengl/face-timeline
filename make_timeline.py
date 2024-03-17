@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 from tqdm import tqdm
 
-load_dotenv()
+load_dotenv(override=True)
 
 width = int(getenv("width", "512"))
 base_fps = int(getenv("base_fps", "24"))
