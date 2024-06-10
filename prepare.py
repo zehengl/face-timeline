@@ -21,7 +21,6 @@ output.mkdir(exist_ok=True, parents=True)
 files = list(selfies.glob("*.jpg"))
 df = pd.DataFrame({"file": files})
 df["date"] = df["file"].apply(lambda x: pd.to_datetime(x.stem))
-df.to_pickle(output / "df.pkl")
 
 # %%
 plt.cla()
