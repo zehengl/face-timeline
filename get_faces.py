@@ -1,31 +1,28 @@
 # %%
 import logging
-from os import getenv
-from pathlib import Path
 
 import cv2
-from dotenv import load_dotenv
 from tqdm import tqdm
 from ultralytics import YOLO
 
+from settings import faces_cv2, faces_yolo, force_all, selfies
+
 logging.getLogger("ultralytics").setLevel(logging.ERROR)
-
-load_dotenv(override=True)
-
-subfolder = getenv("subfolder")
-
-output = Path("output") if not subfolder else Path(f"output/{subfolder}")
-output.mkdir(exist_ok=True, parents=True)
-
-selfies = Path(getenv("selfies"))
-
-faces_yolo = output / "faces-yolo"
-faces_yolo.mkdir(exist_ok=True)
 
 model = YOLO("yolov8n.pt")
 
 # %%
-for file in tqdm(list(selfies.glob("*.jpg")), desc="Getting Faces by YOLO"):
+if force_all:
+    files = list(selfies.glob("*.jpg"))
+else:
+    files = [
+        f
+        for f in selfies.glob("*.jpg")
+        if f.name not in [d.name for d in faces_yolo.glob("*.jpg")]
+    ]
+
+
+for file in tqdm(files, desc="Getting Faces by YOLO"):
     result = model(file, classes=[0])
 
     x, y, w, h = [int(d) for d in result[0].boxes.xywh[0].tolist()]
@@ -38,11 +35,7 @@ for file in tqdm(list(selfies.glob("*.jpg")), desc="Getting Faces by YOLO"):
 
 
 # %%
-faces = output / "faces-cv2"
-faces.mkdir(exist_ok=True)
-
-
-def get_face(path, dest=faces):
+def get_face(path, dest=faces_cv2):
     img = cv2.imread(str(path))
     gray = cv2.equalizeHist(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
     face_cascade = cv2.CascadeClassifier(
@@ -70,5 +63,14 @@ def get_face(path, dest=faces):
 
 
 # %%
-for path in tqdm(list(faces_yolo.glob("*.jpg")), desc="Getting Faces by CV2"):
+if force_all:
+    files = list(faces_yolo.glob("*.jpg"))
+else:
+    files = [
+        f
+        for f in faces_yolo.glob("*.jpg")
+        if f.name not in [d.name for d in faces_cv2.glob("*.jpg")]
+    ]
+
+for path in tqdm(files, desc="Getting Faces by CV2"):
     get_face(path)

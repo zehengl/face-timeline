@@ -1,21 +1,9 @@
 # %%
-from os import getenv
-from pathlib import Path
-
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from dotenv import load_dotenv
 
-load_dotenv(override=True)
-
-selfies = Path(getenv("selfies"))
-assert selfies.exists()
-
-subfolder = getenv("subfolder")
-
-output = Path("output") if not subfolder else Path(f"output/{subfolder}")
-output.mkdir(exist_ok=True, parents=True)
+from settings import output, selfies
 
 # %%
 files = list(selfies.glob("*.jpg"))
@@ -26,6 +14,7 @@ df["date"] = df["file"].apply(lambda x: pd.to_datetime(x.stem))
 plt.cla()
 ax = sns.countplot(df, x=df["date"].dt.year)
 ax.set(xlabel="Year")
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
 ax.get_figure().savefig(output / "count-per-year.png", dpi=300, bbox_inches="tight")
 
 # %%

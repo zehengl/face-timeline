@@ -1,22 +1,10 @@
 # %%
-from os import getenv
-from pathlib import Path
-
 import cv2
 import pandas as pd
-from dotenv import load_dotenv
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 from tqdm import tqdm
 
-load_dotenv(override=True)
-
-width = int(getenv("width", "512"))
-base_fps = int(getenv("base_fps", "24"))
-date_x = float(getenv("date_x", ".75"))
-subfolder = getenv("subfolder")
-
-output = Path("output") if not subfolder else Path(f"output/{subfolder}")
-output.mkdir(exist_ok=True, parents=True)
+from settings import base_fps, date_x, output, width
 
 
 # %%
