@@ -32,8 +32,6 @@ A Python script to make video from selfies
 
 2.  Run Script
 
-        python prepare.py
-        python get_faces.py
         python make_timeline.py
 
 ## Credits
