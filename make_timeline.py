@@ -52,7 +52,7 @@ def get_face(path, dest=faces_cv2):
     cv2.imwrite(str(dest / f"{path.stem}.jpg"), face)
 
 
-def generate(faces, opt):
+def generate(faces):
     size = (width, width)
 
     files = list(faces.glob("*.jpg"))
@@ -65,7 +65,7 @@ def generate(faces, opt):
 
     for year, by_year in df.groupby("year"):
         imgs = []
-        desc = f"Generating {year} Video for {opt}"
+        desc = f"Generating {year} Video"
         for filename in tqdm(by_year["file"], desc=desc):
             img = cv2.imread(str(filename))
             if img.shape != size:
@@ -82,11 +82,11 @@ def generate(faces, opt):
             )
             imgs.append(img)
 
-        timeline = output / f"face-timeline-{opt}"
+        timeline = output / f"face-timeline"
         timeline.mkdir(exist_ok=True)
 
         out = cv2.VideoWriter(
-            str(timeline / f"face-timeline-{opt}-{year}.mp4"),
+            str(timeline / f"face-timeline-{year}.mp4"),
             cv2.VideoWriter_fourcc(*"mp4v"),
             max(
                 int(base_fps * (by_year.shape[0] / ave_imgs)),
@@ -101,12 +101,12 @@ def generate(faces, opt):
 
     print()
     clips = [
-        VideoFileClip(str(timeline / f"face-timeline-{opt}-{y}.mp4"))
+        VideoFileClip(str(timeline / f"face-timeline-{y}.mp4"))
         for y in df.year.unique()
     ]
 
     final_clip = concatenate_videoclips(clips)
-    final_clip.write_videofile(str(output / f"face-timeline-{opt}.mp4"), logger=None)
+    final_clip.write_videofile(str(output / f"face-timeline.mp4"), logger=None)
 
 
 # %%
@@ -181,8 +181,4 @@ for path in tqdm(files, desc="Getting Faces by CV2"):
     get_face(path)
 
 # %%
-for opt in ["cv2", "yolo"]:
-    faces = output / f"faces-{opt}"
-    faces.mkdir(exist_ok=True)
-
-    generate(faces, opt)
+generate(faces_cv2)
