@@ -82,7 +82,7 @@ def generate(faces):
             )
             imgs.append(img)
 
-        timeline = output / f"face-timeline"
+        timeline = output / "face-timeline"
         timeline.mkdir(exist_ok=True)
 
         out = cv2.VideoWriter(
@@ -106,7 +106,7 @@ def generate(faces):
     ]
 
     final_clip = concatenate_videoclips(clips)
-    final_clip.write_videofile(str(output / f"face-timeline.mp4"), logger=None)
+    final_clip.write_videofile(str(output / "face-timeline.mp4"), logger=None)
 
 
 # %%
