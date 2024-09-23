@@ -1,9 +1,9 @@
 moviepy==1.0.3
 opencv-python==4.10.0.84
-pandas==2.2.2
+pandas==2.2.3
 python-dotenv==1.0.1
 seaborn==0.13.2
 torch==2.4.1
 torchvision==0.19.1
 tqdm==4.66.5
-ultralytics==8.2.94
+ultralytics==8.2.99
