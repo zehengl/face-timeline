@@ -12,6 +12,7 @@ subfolder = getenv("subfolder")
 
 width = int(getenv("width", "512"))
 base_fps = int(getenv("base_fps", "24"))
+fixed_fps = getenv("fixed_fps") in ["true", "yes"]
 date_x = float(getenv("date_x", ".75"))
 subfolder = getenv("subfolder")
 

@@ -14,6 +14,7 @@ from settings import (
     date_x,
     faces_cv2,
     faces_yolo,
+    fixed_fps,
     force_all,
     output,
     selfies,
@@ -88,9 +89,13 @@ def generate(faces):
         out = cv2.VideoWriter(
             str(timeline / f"face-timeline-{year}.mp4"),
             cv2.VideoWriter_fourcc(*"mp4v"),
-            max(
-                int(base_fps * (by_year.shape[0] / ave_imgs)),
-                base_fps // 2,
+            (
+                base_fps
+                if fixed_fps
+                else max(
+                    int(base_fps * (by_year.shape[0] / ave_imgs)),
+                    base_fps // 2,
+                )
             ),
             size,
         )
