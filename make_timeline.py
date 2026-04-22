@@ -23,7 +23,7 @@ from settings import (
 
 logging.getLogger("ultralytics").setLevel(logging.ERROR)
 
-model = YOLO("yolo11n.pt")
+model = YOLO("yolo26n.pt")
 
 
 def get_face(path, dest=faces_cv2):
