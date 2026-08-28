@@ -1,5 +1,7 @@
 # %%
 import logging
+import shutil
+import subprocess
 
 import cv2
 import matplotlib.pyplot as plt
@@ -105,13 +107,42 @@ def generate(faces):
         out.release()
 
     print()
-    clips = [
-        VideoFileClip(str(timeline / f"face-timeline-{y}.mp4"))
-        for y in df.year.unique()
-    ]
+    if fixed_fps and shutil.which("ffmpeg"):
+        clips = [timeline / f"face-timeline-{y}.mp4" for y in df.year.unique()]
+        file_list = output / "file_list.txt"
+        with open(file_list, "w", encoding="utf-8") as f:
+            for clip in clips:
+                f.write(f"file '{clip.absolute()}'\n")
 
-    final_clip = concatenate_videoclips(clips)
-    final_clip.write_videofile(str(output / "face-timeline.mp4"), logger=None)
+        output_file = output / "face-timeline.mp4"
+        cmd = [
+            "ffmpeg",
+            "-f",
+            "concat",
+            "-safe",
+            "0",
+            "-i",
+            file_list,
+            "-c",
+            "copy",
+            output_file,
+            "-y",
+        ]
+
+        try:
+            subprocess.run(cmd, check=True)
+            print(f"Successfully merged into {output_file}!")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred: {e}")
+
+    else:
+        clips = [
+            VideoFileClip(str(timeline / f"face-timeline-{y}.mp4"))
+            for y in df.year.unique()
+        ]
+
+        final_clip = concatenate_videoclips(clips)
+        final_clip.write_videofile(str(output / "face-timeline.mp4"), logger=None)
 
 
 # %%
